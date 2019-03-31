@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migratedb-prod
+spec:
+  template:
+    metadata:
+      name: migratedb-prod
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: migratedb-prod
+        image: gcr.io/devpassport-228701/github.com/scottefein/devpassport:prod
+        imagePullPolicy: Always
+        command: ['bundle', 'exec','rails','db:migrate']
+        env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-prod-secrets
+                key: DATABASE_URL
+          - name: NODE_ENV
+            value: "production"

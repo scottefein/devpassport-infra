@@ -1,0 +1,8 @@
+[
+    {
+      "origin": ["https://www.devpassport.com","https://admin.devpassport.com","https://devpassport.com","https://speaker.devpassport.com","https://devpassport-assets.storage.googleapis.com"],
+      "responseHeader": ["Content-Type"],
+      "method": ["GET", "HEAD", "DELETE"],
+      "maxAgeSeconds": 3600
+    }
+]

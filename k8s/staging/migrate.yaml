@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migratedb
+spec:
+  template:
+    metadata:
+      name: migratedb
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: migratedb
+        image: gcr.io/devpassport-228701/github.com/scottefein/devpassport:latest
+        imagePullPolicy: Always
+        command: ['bundle', 'exec','rails','db:migrate']
+        env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: DATABASE_URL
+          - name: NODE_ENV
+            value: "production"
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: '/app/service-account.json'

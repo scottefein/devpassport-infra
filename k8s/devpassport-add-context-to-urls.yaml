@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devpassport-add-context-to-urls
+  labels:
+    app: devpassport-add-context-to-urls
+    pvm: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devpassport-add-context-to-urls
+  template:
+    metadata:
+      labels:
+        app: devpassport-add-context-to-urls
+    spec:
+      containers:
+      - name: devpassport-add-context-to-urls
+        image: gcr.io/devpassport-228701/github.com/scottefein/devpassport-add-context-to-urls:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "1000Mi"
+          limits:
+            memory: "3Gi"
+        env:
+          - name: ENCODED_GOOGLE_APPLICATION_CREDENTIALS
+            valueFrom:
+              secretKeyRef:
+                name: devsecrets
+                key: ENCODED_GOOGLE_APPLICATION_CREDENTIALS
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: devsecrets
+                key: DB_NAME
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: devsecrets
+                key: DB_USER
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: devsecrets
+                key: DB_PASSWORD
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: devsecrets
+                key: DB_HOST
+          - name: DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: devsecrets
+                key: DB_PORT
+      priorityClassName: low-priority

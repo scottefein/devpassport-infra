@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devpassport-staging
+  labels:
+    app: devpassport-staging
+    pvm: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devpassport-staging
+  template:
+    metadata:
+      labels:
+        app: devpassport-staging
+    spec:
+      containers:
+      - name: devpassport-staging
+        image: gcr.io/devpassport-228701/github.com/scottefein/devpassport:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "1000Mi"
+          limits:
+            memory: "3Gi"
+        command: ["rails","s"]
+        env:
+          - name: RAILS_ENV
+            value: "production"
+          - name: SPEAKER_SITE_URL
+            value: "https://speaker.staging.devpassport.com"
+          - name: PROJECT_ID
+            value: 'devpassport-228701'
+          - name: IAP_BACKEND
+            value: '2079058211215152595'
+          - name: IAP_PROJECT_ID
+            value: '153885494'
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: '/app/service-account.json'
+          - name: ASSET_HOST
+            value: 'https://devpassport-assets-staging.storage.googleapis.com'
+          - name: APP_SEARCH_ENGINE_NAME
+            value: staging-devpassport
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: DATABASE_URL
+          - name: REDIS_URL
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: REDIS_URL
+          - name: NODE_ENV
+            value: "production"
+          - name: SECRET_KEY_BASE
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: SECRET_KEY_BASE
+          - name: AUTHO_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: AUTHO_CLIENT_ID
+          - name: AUTHO_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: AUTHO_SECRET_KEY
+          - name: AUTHO_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: AUTHO_DOMAIN
+          - name: AUTHO_AUDIENCE
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: AUTHO_AUDIENCE
+          - name: AUTHO_SIGNING_CERT
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: AUTHO_SIGNING_CERT
+          - name: APP_SEARCH_HOST
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: APP_SEARCH_HOST
+          - name: APP_SEARCH_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: APP_SEARCH_API_KEY
+          - name: GCP_SERVICE_ACCOUNT
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: ENCODED_GOOGLE_APPLICATION_CREDENTIALS
+          - name: STRIPE_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: STRIPE_API_KEY
+          - name: MAILGUN_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: MAILGUN_API_KEY
+          - name: MAILGUN_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: MAILGUN_DOMAIN
+      priorityClassName: high-priority

@@ -1,0 +1,127 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devpassport-prod-sidekiq
+  labels:
+    app: devpassport-prod-sidekiq
+    pvm: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devpassport-prod-sidekiq
+  template:
+    metadata:
+      labels:
+        app: devpassport-prod-sidekiq
+    spec:
+      containers:
+      - name: devpassport-prod-sidekiq
+        image: gcr.io/devpassport-228701/github.com/scottefein/devpassport:prod
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "1000Mi"
+          limits:
+            memory: "3Gi"
+        volumeMounts:
+          - name: k8s-logging-writer-prod
+            mountPath: /secrets
+            readOnly: true
+        command: ["bundle","exec","sidekiq"]
+        env:
+          - name: LOGGING_CREDENTIALS
+            value: '/secrets/service-account.json'
+          - name: SPEAKER_SITE_URL
+            value: "https://speaker.devpassport.com"
+          - name: APP_SEARCH_ENGINE_NAME
+            value: prod-devpassport
+          - name: RAILS_ENV
+            value: "production"
+          - name: ASSET_HOST
+            value: 'https://devpassport-assets.storage.googleapis.com'
+          - name: PROJECT_ID
+            value: 'devpassport-228701'
+          - name: IAP_PROJECT_ID
+            value: '153885494'
+          - name: IAP_BACKEND
+            value: '2249640834594768289'
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-prod-secrets
+                key: DATABASE_URL
+          - name: REDIS_URL
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-prod-secrets
+                key: REDIS_URL
+          - name: NODE_ENV
+            value: "production"
+          - name: SECRET_KEY_BASE
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-prod-secrets
+                key: SECRET_KEY_BASE
+          - name: AUTHO_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-prod-secrets
+                key: AUTHO_CLIENT_ID
+          - name: AUTHO_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-prod-secrets
+                key: AUTHO_SECRET_KEY
+          - name: AUTHO_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-prod-secrets
+                key: AUTHO_DOMAIN
+          - name: AUTHO_AUDIENCE
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-prod-secrets
+                key: AUTHO_AUDIENCE
+          - name: AUTHO_SIGNING_CERT
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-prod-secrets
+                key: AUTHO_SIGNING_CERT
+          - name: APP_SEARCH_HOST
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-prod-secrets
+                key: APP_SEARCH_HOST
+          - name: APP_SEARCH_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-prod-secrets
+                key: APP_SEARCH_API_KEY
+          - name: STRIPE_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-prod-secrets
+                key: STRIPE_API_KEY
+          - name: MAILGUN_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-prod-secrets
+                key: MAILGUN_API_KEY
+          - name: MAILGUN_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-prod-secrets
+                key: MAILGUN_DOMAIN
+      priorityClassName: high-priority
+      volumes:
+        - name: k8s-logging-writer-prod
+          secret:
+            secretName: k8s-logging-writer-prod
+
+        
+
+        
+    
+    
+    

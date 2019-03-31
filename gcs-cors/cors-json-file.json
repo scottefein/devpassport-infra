@@ -1,0 +1,8 @@
+[
+    {
+      "origin": ["https://www.staging.devpassport.com","https://admin.staging.devpassport.com","https://staging.devpassport.com","http://staging.devpassport.com","http://devpassport-assets-staging.storage.googleapis.com","https://devpassport-assets-staging.storage.googleapis.com"],
+      "responseHeader": ["Content-Type"],
+      "method": ["GET", "HEAD", "DELETE"],
+      "maxAgeSeconds": 3600
+    }
+]
