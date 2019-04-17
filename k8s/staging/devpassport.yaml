@@ -114,4 +114,14 @@ spec:
               secretKeyRef:
                 name: devpassport-staging-secrets
                 key: MAILGUN_DOMAIN
+          - name: STRIPE_PUBLISHABLE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: STRIPE_PUBLISHABLE_KEY
+          - name: STRIPE_REDIRECT_URL
+            valueFrom:
+              secretKeyRef:
+                name: devpassport-staging-secrets
+                key: STRIPE_REDIRECT_URL
       priorityClassName: high-priority

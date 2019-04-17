@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: conference-tracker-app
+  labels:
+    pvm: "true"
+spec:
+  template:
+    spec:
+      containers:
+      - name: conference-tracker-app
+        image: gcr.io/devpassport-228701/github.com/scottefein/conference-tracker-app:latest
+        imagePullPolicy: Always
+        env:
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: devpassport-prod-secrets
+                  key: DB_NAME
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: devpassport-prod-secrets
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: devpassport-prod-secrets
+                  key: DB_PASSWORD
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: devpassport-prod-secrets
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: devpassport-prod-secrets
+                  key: DB_PORT
+            - name: CLOUDSQL_CONNECTION_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: devpassport-prod-secrets
+                  key: CLOUDSQL_CONNECTION_NAME
+            - name: CLOUDSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: devpassport-prod-secrets
+                  key: CLOUDSQL_USER
+            - name: CLOUDSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: devpassport-prod-secrets
+                  key: CLOUDSQL_PASSWORD
+      restartPolicy: OnFailure
