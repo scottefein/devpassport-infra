@@ -4,7 +4,6 @@ metadata:
   name: devpassport-prod-sidekiq
   labels:
     app: devpassport-prod-sidekiq
-    pvm: "true"
 spec:
   replicas: 1
   selector:
